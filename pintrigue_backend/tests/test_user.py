@@ -56,7 +56,7 @@ class TestUserClass:
                            image_id=image_id) == {"success": True}
         new_user = get_user_by_email(email=user.email)
         # delete the newly created account to stop filling db with test info
-        # delete_user(user_id=str(new_user['user_id']), email=new_user['email'])  # clean up
+        delete_user(user_id=str(new_user['user_id']), email=new_user['email'])  # clean up
 
     def test_update_username(self, create_test_user):
         """
