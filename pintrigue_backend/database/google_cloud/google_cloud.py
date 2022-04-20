@@ -10,6 +10,7 @@ load_dotenv()
 
 # env variables
 BUCKET_NAME = os.getenv('BUCKET_NAME')
+PROJECT_NAME = os.getenv('PROJECT_NAME')
 
 """
 Set up Google cloud client, bucket and authentication
@@ -18,7 +19,7 @@ Set up Google cloud client, bucket and authentication
 
 credentials = service_account.Credentials.from_service_account_file('service_account.json')
 
-client = storage.Client(credentials=credentials, project='pintrigue-project')
+client = storage.Client(credentials=credentials, project=PROJECT_NAME)
 
 # get cloud bucket using URL
 bucket = client.get_bucket(BUCKET_NAME)
