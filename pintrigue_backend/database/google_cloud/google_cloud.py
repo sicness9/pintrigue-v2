@@ -33,7 +33,7 @@ def upload_blob(source_file_name, destination_blob_name):
     :param source_file_name:
 
     ID of the object
-    destination_blob_name = "storage-object-name"
+    destination_blob_name = the name of the object once uploaded into the bucket
     :param destination_blob_name:
     """
     blob = bucket.blob(destination_blob_name)
@@ -49,7 +49,7 @@ def download_blob(source_blob_name, destination_file_name):
     :param source_blob_name:
 
     The path to which the file should be downloaded
-    destination_file_name = "local/path/to/file"
+    destination_file_name = name of the file as we want it named in the bucket
     :param destination_file_name:
     """
     blob = bucket.blob(source_blob_name)
