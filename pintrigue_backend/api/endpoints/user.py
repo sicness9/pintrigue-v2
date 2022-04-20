@@ -7,9 +7,9 @@ from typing import List
 from fastapi import HTTPException, APIRouter
 from fastapi.encoders import jsonable_encoder
 
-from pintrigue_backend.schemas.schemas import User, UserCreate, UserWithID, UserInDB
+from pintrigue_backend.schemas.schemas import User, UserCreate, UserWithID
 from pintrigue_backend.database.mongodb.db import get_user, get_all_users, create_user, delete_user, update_username, \
-    update_password, get_user_by_email, get_user_by_id
+    update_password, get_user_by_email
 from ..auth.auth_utils import get_password_hash
 
 
