@@ -6,10 +6,12 @@ from dotenv import load_dotenv
 from fastapi import HTTPException, APIRouter, Request, UploadFile, File, Depends
 from fastapi.encoders import jsonable_encoder
 
+
 from pintrigue_backend.database.google_cloud.google_cloud import upload_blob, get_image_url
 from pintrigue_backend.database.mongodb.db import get_pins, get_pin_by_id, get_pins_by_category, create_pin, get_pin, \
     delete_pin, update_pin_image
 from pintrigue_backend.schemas.schemas import PinInDB, PinCreate, Pin
+from ..image_utils import convert_image
 
 load_dotenv()
 
@@ -112,8 +114,13 @@ def api_upload_image(file: UploadFile = File(...)):
     :param file:
     :return:
     """
-    upload_blob(source_file_name=file.file, destination_blob_name=file.filename)
-    image_id = get_image_url(source_blob_name=file.filename)
+    print("Received file", file.filename)
+    image_old = file.file
+    image_new = f"{file.filename[:-4]}.webp"
+    print("New image filename", image_new)
+    im = convert_image(image_old=image_old)
+    upload_blob(source_file_name=im, destination_blob_name=image_new)
+    image_id = get_image_url(source_blob_name=image_new)
     return image_id
 
 
