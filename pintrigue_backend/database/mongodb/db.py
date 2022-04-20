@@ -184,6 +184,7 @@ def delete_user(user_id, email):
     """
     - Take the given email and delete a user from the 'users' collection
     - Verify the user is deleted by using the get_user function
+    :param user_id:
     :param email:
     :return:
     """
