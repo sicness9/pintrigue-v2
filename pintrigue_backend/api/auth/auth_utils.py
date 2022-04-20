@@ -15,13 +15,14 @@ from pintrigue_backend.schemas.schemas import TokenData, Token, User, UserWithID
 
 load_dotenv()
 
-oauth2 = OAuth2PasswordBearer(tokenUrl='http://127.0.0.1:8000/api/auth/login/access-token')
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 # JWT variables
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+TOKEN_URL = os.getenv("TOKEN_URL")
+
+oauth2 = OAuth2PasswordBearer(tokenUrl=TOKEN_URL)
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 # verify hashed password with the plain
