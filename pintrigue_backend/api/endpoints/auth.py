@@ -8,7 +8,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from ..auth.auth_utils import authenticate_user, create_access_token, get_current_active_user
 from pintrigue_backend.schemas.schemas import Token, UserWithID
-from pintrigue_backend.database.mongodb.db import login
+from pintrigue_backend.database.mongodb.db_user import login
 
 
 router = APIRouter(
