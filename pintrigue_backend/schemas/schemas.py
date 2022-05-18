@@ -3,7 +3,7 @@ from datetime import datetime
 
 # from bson import ObjectId
 from pydantic import BaseModel, Field
-
+from fastapi import Form, File, UploadFile
 
 # class PyObjectId(ObjectId):
 #     @classmethod
@@ -115,10 +115,28 @@ Pin schemas
 
 
 class Pin(BaseModel):
+    postedby: str
     title: str
     about: str
     category: str
-    image_id: str
+    image_id: UploadFile
+
+    @classmethod
+    def as_form(
+            cls,
+            postedby: str = Form(...),
+            title: str = Form(...),
+            about: str = Form(...),
+            category: str = Form(...),
+            image_id: UploadFile = File(...)
+    ):
+        return cls(
+            postedby=postedby,
+            title=title,
+            about=about,
+            category=category,
+            image_id=image_id
+        )
 
 
 class PinCreate(Pin):
@@ -126,7 +144,7 @@ class PinCreate(Pin):
 
 
 class PinInDB(PinCreate):
-    posted_by: str
+    image_id: str
     comments: List[Comment] = None
     pin_id: str
     created_at: str
