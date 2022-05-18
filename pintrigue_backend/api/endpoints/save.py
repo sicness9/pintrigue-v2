@@ -4,7 +4,7 @@ from fastapi import HTTPException, APIRouter
 from fastapi.encoders import jsonable_encoder
 
 from pintrigue_backend.schemas.schemas import Save
-from pintrigue_backend.database.mongodb.db import add_save, remove_save
+from pintrigue_backend.database.mongodb.db_save import add_save, remove_save
 
 router = APIRouter(
     prefix="/api/saves",
