@@ -8,9 +8,9 @@ from fastapi.encoders import jsonable_encoder
 
 
 from pintrigue_backend.database.google_cloud.google_cloud import upload_blob, get_image_url
-from pintrigue_backend.database.mongodb.db import get_pins, get_pin_by_id, get_pins_by_category, create_pin, get_pin, \
-    delete_pin, update_pin_image
-from pintrigue_backend.schemas.schemas import PinInDB, PinCreate, Pin
+from pintrigue_backend.database.mongodb.db_pin import get_pins, get_pin_by_id, get_pins_by_category, create_pin, \
+    get_pin, delete_pin, update_pin_image, get_popular_pin_categories, get_all_pins
+from pintrigue_backend.schemas.schemas import PinCreate, Pin
 from ..image_utils import convert_image
 
 load_dotenv()
@@ -40,6 +40,12 @@ def api_get_pins():
     return jsonable_encoder(response)
 
 
+@router.get("/all-pins")
+def api_get_all_pins():
+    response = get_all_pins()
+    return jsonable_encoder(response)
+
+
 @router.get("/search")
 def api_search_pins(request: Request):
     """
@@ -51,7 +57,8 @@ def api_search_pins(request: Request):
 
     # get the current page
     try:
-        page = int(request.path_params.get("page", 0))
+        page = int(request.query_params['page'])
+        print("Current Page: ", page)
     except (TypeError, ValueError) as e:
         print('Got a bad value: ', e)
         page = 0
@@ -59,8 +66,9 @@ def api_search_pins(request: Request):
     # get the filters
     filters = {}
     filter_results = {}
-    category = request.path_params.fromkeys('category')
-    posted_by = request.path_params.fromkeys('posted_by')
+    category = request.query_params['category']
+    print("Received category param ", category)
+    posted_by = request.query_params['posted_by']
     if category:
         filters["category"] = category
         filter_results["category"] = category
@@ -90,6 +98,13 @@ def api_search_pin_by_id(pin_id):
         return {"Error": "Pin not found"}
     else:
         return pin
+
+
+@router.get("/popular")
+def api_search_popular_pins(limit: int):
+    pin = get_popular_pin_categories(limit=limit)
+    print("Popular Pins returned ", pin)
+    return jsonable_encoder(pin)
 
 
 @router.get("/category")
@@ -128,27 +143,28 @@ def api_upload_image(file: UploadFile = File(...)):
 def api_update_pin_image(pin_id, image_id: str = Depends(api_upload_image)):
     response = update_pin_image(pin_id=pin_id, image_id=image_id)
     if response:
-        pin = get_pin_by_id(pin_id=pin_id)
-        return pin
+        return get_pin_by_id(pin_id=pin_id)
     raise HTTPException(400, "Something went wrong")
 
 
-@router.post("/create_pin", response_model=PinInDB)
-def api_create_pin(pin: PinCreate, postedby: str):
+@router.post("/create_pin")
+def api_create_pin(pin: PinCreate = Depends(PinCreate.as_form)):
     """
     All newly created pins have the "no image" url in the image_id
     Using the Pin schema, input all pin fields in order to create a pin using create_pin
+    :param image_id:
     :param pin:
-    :param postedby:
     :return:
     """
-    image_id = f"https://storage.googleapis.com/{BUCKET_NAME}/No_image_available.svg.png"
-    response = create_pin(title=pin.title, about=pin.about, category=pin.category,
-                          image_id=image_id, posted_by=postedby)
+    print("Form data received", pin)
+    image_id = api_upload_image(pin.image_id)
+    print("Image file received: ", image_id)
+    response = create_pin(title=pin.title, about=pin.about, category=pin.category.lower(),
+                          image_id=image_id, posted_by=pin.postedby)
     print("Response received:", response)
     if response:
-        new_pin = get_pin(title=pin.title, posted_by=postedby)
-        return jsonable_encoder(new_pin)
+        new_pin = get_pin(title=pin.title, posted_by=pin.postedby)
+        return new_pin
     raise HTTPException(400, "Something went wrong")
 
 
