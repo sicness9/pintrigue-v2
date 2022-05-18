@@ -5,8 +5,9 @@ from dotenv import load_dotenv
 from random import randint, choice
 import pytest
 
-from pintrigue_backend.database.mongodb.db import create_pin, get_all_users, get_pins_by_category, get_random_pin, \
+from pintrigue_backend.database.mongodb.db_pin import create_pin, get_pins_by_category, get_random_pin, \
     get_pin_by_id, delete_pin, get_pin, update_pin_title, update_pin_about, update_pin_category
+from pintrigue_backend.database.mongodb.db_user import get_all_users
 
 load_dotenv()
 

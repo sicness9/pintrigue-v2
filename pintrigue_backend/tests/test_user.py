@@ -3,7 +3,7 @@
 import os
 from dotenv import load_dotenv
 
-from pintrigue_backend.database.mongodb.db import create_user, update_username, get_user_by_email, delete_user, \
+from pintrigue_backend.database.mongodb.db_user import create_user, update_username, get_user_by_email, delete_user, \
     update_password
 from pintrigue_backend.api.auth.auth_utils import get_password_hash
 
