@@ -2,7 +2,7 @@
 
 from fastapi import HTTPException, APIRouter
 
-from pintrigue_backend.database.mongodb.db import create_comment, update_comment, delete_comment
+from pintrigue_backend.database.mongodb.db_comment import create_comment, update_comment, delete_comment
 from pintrigue_backend.schemas.schemas import Comment
 
 router = APIRouter(
