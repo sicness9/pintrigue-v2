@@ -8,10 +8,9 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from fastapi.encoders import jsonable_encoder
 
-from pintrigue_backend.database.mongodb.db import get_user, verify_active_session, get_user_by_id
-from pintrigue_backend.schemas.schemas import TokenData, Token, User, UserWithID
+from pintrigue_backend.database.mongodb.db_user import get_user, verify_active_session, get_user_by_id
+from pintrigue_backend.schemas.schemas import UserWithID
 
 load_dotenv()
 
