@@ -59,5 +59,5 @@ def download_blob(source_blob_name, destination_file_name):
 
 # get the public url for an image from within the bucket
 def get_image_url(source_blob_name):
-    url = f"https://storage.googleapis.com/{BUCKET_NAME}/{source_blob_name}"
+    url = f"{source_blob_name}"
     return url
