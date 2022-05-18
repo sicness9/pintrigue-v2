@@ -8,8 +8,8 @@ from fastapi import HTTPException, APIRouter
 from fastapi.encoders import jsonable_encoder
 
 from pintrigue_backend.schemas.schemas import User, UserCreate, UserWithID
-from pintrigue_backend.database.mongodb.db import get_user, get_all_users, create_user, delete_user, update_username, \
-    update_password, get_user_by_email
+from pintrigue_backend.database.mongodb.db_user import get_user, get_all_users, create_user, delete_user, \
+    update_username, update_password, get_user_by_email
 from ..auth.auth_utils import get_password_hash
 
 
@@ -76,7 +76,7 @@ def api_user_signup(user: UserCreate) -> any:
     elif user.email == get_user_by_email(user.email):
         raise HTTPException(400, "Email already in use")
 
-    image_id = f"https://storage.googleapis.com/{BUCKET_NAME}/No_image_available.svg.png"
+    image_id = f"https://storage.googleapis.com/{BUCKET_NAME}/no_image.webp"
     response = create_user(name=user.name, username=user.username, email=user.email,
                            hashedpw=get_password_hash(user.password), image_id=image_id)
     if response:
