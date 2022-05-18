@@ -4,8 +4,11 @@ import pytest
 from random import choice
 from faker import Faker
 
-from pintrigue_backend.database.mongodb.db import create_comment, get_random_pin,  get_random_comment, get_comment, \
-    update_comment, delete_comment, get_all_users
+from pintrigue_backend.database.mongodb.db_comment import create_comment,   get_random_comment, get_comment, \
+    update_comment, delete_comment
+from pintrigue_backend.database.mongodb.db_pin import get_random_pin
+from pintrigue_backend.database.mongodb.db_user import get_all_users
+
 
 fake = Faker()
 
